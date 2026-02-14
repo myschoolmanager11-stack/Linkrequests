@@ -13,32 +13,30 @@ function loadInstitutions() {
     institutionSelect.innerHTML = '<option>جارٍ تحميل المؤسسات...</option>';
 
     fetch(webAppUrl + "?action=getInstitutions")
-        .then(response => response.text()) // نقرأه كنص أولاً
-        .then(text => {
-
-            console.log("Raw response:", text);
-
-            const data = JSON.parse(text); // ثم نحوله إلى JSON يدوياً
+        .then(response => response.json()) // نقرأه مباشرة كـ JSON
+        .then(data => {
 
             if (!data.institutions || data.institutions.length === 0) {
                 throw new Error("لا توجد بيانات");
             }
 
-            institutionSelect.innerHTML = '<option value="">اختر المؤسسة</option>';
+            institutionSelect.innerHTML = '<option value="">-- اختر المؤسسة --</option>';
 
-            data.institutions.forEach(name => {
+            // كل عنصر الآن عبارة عن string
+            data.institutions.forEach(inst => {
                 const option = document.createElement("option");
-                option.value = name;
-                option.textContent = name;
+                option.value = inst;       // inst هنا string مباشرة
+                option.textContent = inst; // نفس الشيء للنص
                 institutionSelect.appendChild(option);
             });
 
         })
         .catch(error => {
             console.error("Load error:", error);
-            institutionSelect.innerHTML = '<option>فشل تحميل المؤسسات</option>';
+            institutionSelect.innerHTML = '<option>❌ فشل تحميل المؤسسات</option>';
         });
 }
+
 
 /* ===============================
    إرسال الطلب
@@ -118,6 +116,7 @@ function validateEmail(email) {
 /* ===============================
    عرض الرسائل
 ==============================
+
 
 
 
