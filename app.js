@@ -6,7 +6,7 @@ const emailInput = document.getElementById("emailInput");
 const notesInput = document.getElementById("notesInput");
 const resultMessage = document.getElementById("resultMessage");
 
-const webAppUrl = "https://script.google.com/macros/s/AKfycbwDydi0_8toDT0hIgZeCX0zxJmbl1efKR59xJjlE3XuCz7I9UqyVAZioMYQG0b6dCP1ow/exec";
+const webAppUrl = "https://script.google.com/macros/s/AKfycbx12uKlGvNbaRrgt3YUUM4VZlaVM8T8CeP0BYbuaOc35p_mXNn8xHSS43hX3602bwyphQ/exec";
 
 /* =========================
    تحميل المؤسسات
@@ -115,3 +115,4 @@ function showMessage(msg, color) {
    تنفيذ التحميل عند فتح الصفحة
 =============================== */
 loadInstitutions();
+
