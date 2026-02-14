@@ -3,7 +3,7 @@ const emailInput = document.getElementById("emailInput");
 const notesInput = document.getElementById("notesInput");
 const resultMessage = document.getElementById("resultMessage");
 
-const webAppUrl = "https://script.google.com/macros/s/AKfycbwFsNRVHbNwLfdJJtpFvXjmmh63fOel9i3i2uc4Kp90KC2xa3SUM1748QY91nAOBnzEfw/exec";
+const webAppUrl = "https://script.google.com/macros/s/AKfycbwFsNRVHbNwLfdJJtpFvXjmmh63fOel9i3i2uc4Kp90KC2xa3SUM1748QY91nAOBnzEfw/exec?action=getInstitutions";
 
 /* ===============================
    تحميل أسماء المؤسسات من Drive
@@ -119,4 +119,5 @@ function validateEmail(email) {
 /* ===============================
    عرض الرسائل
 ==============================
+
 
