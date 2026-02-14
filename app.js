@@ -12,32 +12,33 @@ function loadInstitutions() {
 
     institutionSelect.innerHTML = '<option>جارٍ تحميل المؤسسات...</option>';
 
-    fetch(webAppUrl + "?action=getInstitutions")
-        .then(response => response.json())
-        .then(data => {
+    fetch(webAppUrl + "?action=getInstitutions", {
+        method: "GET",
+        mode: "cors"
+    })
+    .then(response => response.json())
+    .then(data => {
 
-            institutionSelect.innerHTML = '<option value="">اختر المؤسسة</option>';
+        console.log("Response:", data);
 
-            if (data.institutions && data.institutions.length > 0) {
+        if (!data || !data.institutions) {
+            throw new Error("Invalid data format");
+        }
 
-                data.institutions.sort();
+        institutionSelect.innerHTML = '<option value="">اختر المؤسسة</option>';
 
-                data.institutions.forEach(name => {
-                    const option = document.createElement("option");
-                    option.value = name;
-                    option.textContent = name;
-                    institutionSelect.appendChild(option);
-                });
-
-            } else {
-                institutionSelect.innerHTML = '<option>لا توجد مؤسسات</option>';
-            }
-
-        })
-        .catch(error => {
-            console.error(error);
-            institutionSelect.innerHTML = '<option>فشل تحميل المؤسسات</option>';
+        data.institutions.forEach(name => {
+            const option = document.createElement("option");
+            option.value = name;
+            option.textContent = name;
+            institutionSelect.appendChild(option);
         });
+
+    })
+    .catch(error => {
+        console.error("Error loading institutions:", error);
+        institutionSelect.innerHTML = '<option>فشل تحميل المؤسسات</option>';
+    });
 }
 
 /* ===============================
@@ -118,3 +119,4 @@ function validateEmail(email) {
 /* ===============================
    عرض الرسائل
 ==============================
+
