@@ -5,24 +5,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>طلب رابط الفضاء الرقمي</title>
 <link rel="stylesheet" href="style.css">
+<link rel="icon" href="favicon.png" type="image/png">
+<style>
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f8f9ff);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.page-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
+.card { background: white; width: 100%; max-width: 420px; padding: 25px; border-radius: 14px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+.card h2 { text-align: center; margin-bottom: 10px; }
+.subtitle { text-align: center; font-size: 13px; margin-bottom: 20px; color: #555; }
+label { font-size: 13px; font-weight: 600; }
+select, input, textarea { width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; box-sizing: border-box; }
+textarea { min-height: 90px; resize: vertical; }
+button { width: 100%; padding: 12px; border: none; border-radius: 8px; background: #3f51b5; color: white; font-size: 15px; cursor: pointer; transition: 0.3s; }
+button:hover { background: #303f9f; }
+#resultMessage { margin-top: 15px; text-align: center; font-size: 14px; font-weight: 600; }
+.app-footer { background: #3f51b5; color: white; padding: 8px; overflow: hidden; }
+.footer-marquee { white-space: nowrap; animation: move 18s linear infinite; }
+@keyframes move { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@media (max-width: 480px) { .card { padding: 20px; } }
+</style>
 </head>
 
 <body>
-
 <div class="page-wrapper">
-
     <div class="card">
-
         <h2>🌐 طلب رابط الفضاء الرقمي للمؤسسة</h2>
-
-        <p class="subtitle">
-            اختر مؤسستك واملأ البيانات التالية ليتم إرسال رابط البوابة إليكم في أقرب الآجال.
-        </p>
+        <p class="subtitle">اختر مؤسستك واملأ البيانات التالية ليتم إرسال رابط البوابة إليكم في أقرب الآجال.</p>
 
         <!-- اختيار المؤسسة -->
         <label>المؤسسة</label>
         <select id="institutionSelect">
-            <option value="">جارٍ تحميل المؤسسات...</option>
+            <option>جارٍ تحميل المؤسسات...</option>
         </select>
 
         <!-- البريد -->
@@ -35,11 +54,8 @@
 
         <!-- زر إرسال -->
         <button onclick="sendRequest()">📤 إرسال الطلب</button>
-
         <div id="resultMessage"></div>
-
     </div>
-
 </div>
 
 <footer class="app-footer">
@@ -48,6 +64,87 @@
     </div>
 </footer>
 
-<script src="app.js"></script>
+<script>
+// بريد الإدارة
+const ADMIN_EMAIL = "myschoolmanager11@gmail.com";
+
+// عناصر الصفحة
+const institutionSelect = document.getElementById("institutionSelect");
+const emailInput = document.getElementById("emailInput");
+const notesInput = document.getElementById("notesInput");
+const resultMessage = document.getElementById("resultMessage");
+
+// رابط Google Apps Script لتحميل المؤسسات
+const DRIVE_API_URL = "https://script.google.com/macros/s/AKfycbwDydi0_8toDT0hIgZeCX0zxJmbl1efKR59xJjlE3XuCz7I9UqyVAZioMYQG0b6dCP1ow/exec";
+
+// تحميل المؤسسات
+function loadInstitutions() {
+    institutionSelect.innerHTML = '<option>جارٍ تحميل المؤسسات...</option>';
+
+    fetch(DRIVE_API_URL + "?action=getInstitutions")
+    .then(res => res.json())
+    .then(data => {
+        if (!data.institutions || data.institutions.length === 0) {
+            throw new Error("لا توجد بيانات");
+        }
+
+        institutionSelect.innerHTML = '<option value="">-- اختر المؤسسة --</option>';
+        data.institutions.forEach(inst => {
+            const option = document.createElement("option");
+            option.value = inst;
+            option.textContent = inst;
+            institutionSelect.appendChild(option);
+        });
+    })
+    .catch(err => {
+        console.error(err);
+        institutionSelect.innerHTML = '<option>❌ فشل تحميل المؤسسات</option>';
+    });
+}
+
+// إرسال الطلب مباشرة عبر البريد
+function sendRequest() {
+    const institution = institutionSelect.value;
+    const email = emailInput.value.trim();
+    const notes = notesInput.value.trim();
+
+    if (!institution) { showMessage("يرجى اختيار المؤسسة", "red"); return; }
+    if (!validateEmail(email)) { showMessage("يرجى إدخال بريد إلكتروني صحيح", "red"); return; }
+
+    const subject = encodeURIComponent("طلب رابط بوابة - " + institution);
+    const body = encodeURIComponent(
+        "السلام عليكم،\n\n" +
+        "تم إرسال هذا الطلب للحصول على رابط الفضاء الرقمي.\n\n" +
+        "المؤسسة: " + institution + "\n" +
+        "البريد: " + email + "\n" +
+        "ملاحظات: " + (notes || "-") + "\n\n" +
+        "تحياتنا."
+    );
+
+    // فتح بريد المستخدم لإرسال الرسالة مباشرة
+    window.location.href = `mailto:${ADMIN_EMAIL}?subject=${subject}&body=${body}`;
+    showMessage("📬 سيتم فتح بريدك لإرسال الطلب مباشرة", "green");
+
+    // إعادة تهيئة الحقول
+    emailInput.value = "";
+    notesInput.value = "";
+    institutionSelect.selectedIndex = 0;
+}
+
+// تحقق البريد
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+// عرض الرسائل
+function showMessage(msg, color) {
+    resultMessage.innerHTML = msg;
+    resultMessage.style.color = color;
+}
+
+// تنفيذ التحميل عند فتح الصفحة
+loadInstitutions();
+</script>
 </body>
 </html>
