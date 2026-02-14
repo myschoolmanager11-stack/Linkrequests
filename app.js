@@ -12,33 +12,32 @@ function loadInstitutions() {
 
     institutionSelect.innerHTML = '<option>جارٍ تحميل المؤسسات...</option>';
 
-    fetch(webAppUrl + "?action=getInstitutions", {
-        method: "GET",
-        mode: "cors"
-    })
-    .then(response => response.json())
-    .then(data => {
+    fetch(webAppUrl + "?action=getInstitutions")
+        .then(response => response.text()) // نقرأه كنص أولاً
+        .then(text => {
 
-        console.log("Response:", data);
+            console.log("Raw response:", text);
 
-        if (!data || !data.institutions) {
-            throw new Error("Invalid data format");
-        }
+            const data = JSON.parse(text); // ثم نحوله إلى JSON يدوياً
 
-        institutionSelect.innerHTML = '<option value="">اختر المؤسسة</option>';
+            if (!data.institutions || data.institutions.length === 0) {
+                throw new Error("لا توجد بيانات");
+            }
 
-        data.institutions.forEach(name => {
-            const option = document.createElement("option");
-            option.value = name;
-            option.textContent = name;
-            institutionSelect.appendChild(option);
+            institutionSelect.innerHTML = '<option value="">اختر المؤسسة</option>';
+
+            data.institutions.forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                option.textContent = name;
+                institutionSelect.appendChild(option);
+            });
+
+        })
+        .catch(error => {
+            console.error("Load error:", error);
+            institutionSelect.innerHTML = '<option>فشل تحميل المؤسسات</option>';
         });
-
-    })
-    .catch(error => {
-        console.error("Error loading institutions:", error);
-        institutionSelect.innerHTML = '<option>فشل تحميل المؤسسات</option>';
-    });
 }
 
 /* ===============================
@@ -119,5 +118,6 @@ function validateEmail(email) {
 /* ===============================
    عرض الرسائل
 ==============================
+
 
 
