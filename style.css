@@ -1,260 +1,113 @@
-/* ===== توحيد الخط في كامل التطبيق ===== */
-body,
-button,
-input,
-select,
-textarea,
-.dropdown-menu,
-.modal-content,
-table,
-th,
-td {
-    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-    font-size: 8.5pt;
-}
-
-h2,
-h3 {
-    font-size: 10pt;
-    font-weight: bold;
-}
-
 body {
     margin: 0;
-    background: #f2f4ff;
-    direction: rtl;
-}
-
-/* ===== الشريط العلوي ===== */
-.top-bar {
-    background: #3f51b5;
-    color: white;
-    padding: 10px 12px;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f8f9ff);
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.menu-btn {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 22px;
-    cursor: pointer;
-}
-
-/* ===== العنوان ===== */
-.app-title {
-    text-align: center;
+/* الصفحة */
+.page-wrapper {
     flex: 1;
-}
-
-#mainTitle {
-    font-size: 16px;
-    font-weight: 600;
-}
-
-#subTitle {
-    font-size: 12px;
-    opacity: 0.85;
-}
-
-/* ===== القائمة ===== */
-.dropdown-menu {
-    position: absolute;
-    top: 55px;
-    right: 10px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-    display: none;
-    z-index: 1000;
-    min-width: 220px;
-}
-
-.dropdown-menu div {
-    padding: 12px 14px;
-    cursor: pointer;
-    color: #3f51b5;
-    font-size: 14px;
-}
-
-.dropdown-menu div:hover {
-    background: #f0f4ff;
-}
-
-/* فاصل */
-.menu-separator {
-    height: 1px;
-    background: #e0e0e0;
-    margin: 6px 0;
-}
-
-/* زر خطير */
-.menu-danger {
-    color: #d32f2f !important;
-    font-weight: 600;
-}
-
-.menu-danger:hover {
-    background: #fdeaea;
-}
-
-/* ===== المحتوى ===== */
-.container {
-    max-width: 900px;
-    margin: 20px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-/* ===== شريط أدوات المعاينة ===== */
-.viewer-toolbar {
     display: flex;
-    gap: 6px;
-    justify-content: flex-end;
-    margin-bottom: 8px;
-}
-
-.viewer-toolbar button {
-    background: #f0f2ff;
-    border: 1px solid #c5c9ff;
-    border-radius: 6px;
-    padding: 6px 8px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.viewer-toolbar button:hover {
-    background: #e3e6ff;
-}
-
-/* ===== العارض ===== */
-.viewer iframe {
-    width: 100%;
-    height: 600px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-}
-
-/* ===== Modal ===== */
-.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    display: none;
     justify-content: center;
     align-items: center;
-    z-index: 2000;
-}
-
-.modal-content {
-    background: white;
     padding: 20px;
-    border-radius: 10px;
-    width: 90%;
+}
+
+/* البطاقة */
+.card {
+    background: white;
+    width: 100%;
     max-width: 420px;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
-/* ===== عنصر اتصل بنا ===== */
-.modal-content h3 {
-    margin-top: 0;
+.card h2 {
     text-align: center;
+    margin-bottom: 10px;
 }
 
-.modal-content input,
-.modal-content textarea {
+.subtitle {
+    text-align: center;
+    font-size: 13px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+/* الحقول */
+label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+select,
+input,
+textarea {
     width: 100%;
-    padding: 8px;
-    margin-top: 10px;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-radius: 8px;
     border: 1px solid #ccc;
-    border-radius: 6px;
-    font-family: inherit;
     font-size: 14px;
+    box-sizing: border-box;
 }
 
-.modal-content textarea {
+textarea {
+    min-height: 90px;
     resize: vertical;
-    min-height: 100px;
 }
 
-/* ===== نافذة الغياب ===== */
-.absent-filters {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 8px;
-}
-
-#classeFilter {
-    flex: 1;
-    padding: 6px;
-}
-
-.refresh-btn {
-    padding: 6px 10px;
-    cursor: pointer;
-}
-
-.table-container {
-    max-height: 350px;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-}
-
-#absentTable {
+/* زر */
+button {
     width: 100%;
-    border-collapse: collapse;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #3f51b5;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-#absentTable th {
-    background: #eef0ff;
+button:hover {
+    background: #303f9f;
 }
 
-#absentTable th,
-#absentTable td {
-    padding: 8px;
-    border-bottom: 1px solid #ddd;
-}
-
-#absentTable tr:hover {
-    background: #f6f8ff;
-}
-
-/* ===== نص التحميل ===== */
-.loading-text {
+/* رسالة */
+#resultMessage {
+    margin-top: 15px;
     text-align: center;
     font-size: 14px;
-    color: #3f51b5;
-    margin: 10px 0;
-    display: none;
-    animation: pulse 1.4s infinite;
+    font-weight: 600;
 }
 
-@keyframes pulse {
-    0%   { opacity: 0.3; }
-    50%  { opacity: 1; }
-    100% { opacity: 0.3; }
-}
-
-/* ===== Footer ===== */
+/* الفوتر */
 .app-footer {
     background: #3f51b5;
     color: white;
     padding: 8px;
     overflow: hidden;
-    margin-top: 30px;
 }
 
 .footer-marquee {
     white-space: nowrap;
-    font-size: 13px;
-    animation: move 20s linear infinite;
+    animation: move 18s linear infinite;
 }
 
 @keyframes move {
     from { transform: translateX(-100%); }
     to   { transform: translateX(100%); }
+}
+
+/* تحسين الهاتف */
+@media (max-width: 480px) {
+    .card {
+        padding: 20px;
+    }
 }
